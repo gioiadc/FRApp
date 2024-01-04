@@ -91,11 +91,22 @@ FRApp <- function(...) {
       h4("Data loading"),
       fluidRow(
         column(
-          4, "Select a csv file with ',' as field separator and '.' as a decimal separator",
-          fileInput("data", "Choose file", accept = ".csv"),
-          div(style = "margin-top: -10px"),
-          actionButton("example.click", "Load example data")
-        ),
+          4, #"Select a csv file with ',' as field separator and '.' as a decimal separator",
+
+#div(style = "margin-top: -10px"),
+          fluidRow(style = "margin-top: 0px;",
+            column(
+              4,
+              selectInput("sep", "Field separator", choices=c(",",";","tab","space"),
+            selected = c(","), width = "100%")),
+            column(
+              4,
+              selectInput("dec", "Decimal separator", choices=c(".",","),
+                        selected = c("."), width = "100%"))),
+fileInput("data", NULL,
+          accept = ".csv", placeholder = "Select a .csv file"),
+actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
+
         column(8, verbatimTextOutput("contents"))
       ),
       hr(),
@@ -190,7 +201,8 @@ FRApp <- function(...) {
     observeEvent(input$data, {
       file <- input$data
       req(file)
-      rv$mydata <- read.csv(file$datapath, header = T, stringsAsFactors = T)
+      rv$mydata <- read.csv(file$datapath, header = T, stringsAsFactors = T,
+                            sep = input$sep, dec = input$dec)
 
       updateSelectInput(session, "response", choices = c(" ", colnames(rv$mydata)), selected = " ")
       updateSelectInput(session, "explanatory", choices = c(" ", colnames(rv$mydata)), selected = " ")
