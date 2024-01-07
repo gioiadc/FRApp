@@ -33,21 +33,12 @@ install.package("FRApp")
 You can install the development version of FRApp from
 [GitHub](https://github.com/) with:
 
-``` r
-# install.packages("devtools")
-devtools::install_github("gioiadc/FRApp")
-```
-
 ## Data preparation
 
-Save the data in a csv file with a comma as a separator and a period as
-a decimal separator. The first line of the file must contain the name of
-the variables.
-
-If the data is in an Excel file, you can export it by selecting the
-format:
-
-CSV UTF-8 (Comma-delimited) (.csv)
+The application accepts csv files and, by default, it uses the comma as
+field separator and the period as decimal separator. However, when you
+load the dataset, you can select other symbols. The first line of the
+file must contain the name of the variables.
 
 When you open the csv file with a text editor it should look like this:
 
