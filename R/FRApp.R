@@ -92,8 +92,6 @@ FRApp <- function(...) {
       fluidRow(
         column(
           4, #"Select a csv file with ',' as field separator and '.' as a decimal separator",
-
-#div(style = "margin-top: -10px"),
           fluidRow(style = "margin-top: 0px;",
             column(
               3,
@@ -208,11 +206,14 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
 
       if(inherits(loaddata, "try-error")) {
         showModal(modalDialog(paste0("Verify the field and the decimal separators"), easyClose = TRUE, footer = NULL))
-        #rv$mydata <- NULL
-      }else{
+        rv$mydata <- NULL
+        }else{
         rv$mydata <- loaddata
       }
 
+      if(length(rv$mydata)<4){
+        showModal(modalDialog(paste0("Number of imported variables is too low, verify the data"), easyClose = TRUE, footer = NULL))
+      }
 
       updateSelectInput(session, "response", choices = c(" ", colnames(rv$mydata)), selected = " ")
       updateSelectInput(session, "explanatory", choices = c(" ", colnames(rv$mydata)), selected = " ")
