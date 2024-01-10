@@ -96,9 +96,9 @@ FRApp <- function(...) {
 #div(style = "margin-top: -10px"),
           fluidRow(style = "margin-top: 0px;",
             column(
-              4,
-              selectInput("sep", "Field separator", choices=c(",",";","tab","space"),
-            selected = c(","), width = "100%")),
+              3,
+              selectInput("sep", "Field separator", choices=c(";",",","tab","space"),
+            selected = c(";"), width = "100%")),
             column(
               4,
               selectInput("dec", "Decimal separator", choices=c(".",","),
@@ -189,20 +189,30 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
 
   server <- function(input, output, session) {
     rv <- reactiveValues()
-    # observe({
-    #   cat('This is observer\n')
-    #   str(rv$lvl1)
-    #   str(rv$lvl1Name)
-    #   str(rv$rndEff1)
-    #   str(rv$modelname)
-    #   str(input$modelname)
-    # })
 
     observeEvent(input$data, {
       file <- input$data
+
       req(file)
-      rv$mydata <- read.csv(file$datapath, header = T, stringsAsFactors = T,
-                            sep = input$sep, dec = input$dec)
+      if(input$sep==";")  sep <- ";"
+      if(input$sep==",")  sep <- ","
+      if(input$sep=="tab")  sep <- "\t"
+      if(input$sep=="space")  sep <- " "
+
+      if(input$dec==".")  dec <- "."
+      if(input$dec==",")  dec <- ","
+
+      loaddata <- try(read.csv(file$datapath, header = T, stringsAsFactors = T,
+                                sep = sep, dec = dec)
+      )
+
+      if(inherits(loaddata, "try-error")) {
+        showModal(modalDialog(paste0("Verify the field and the decimal separators"), easyClose = TRUE, footer = NULL))
+        #rv$mydata <- NULL
+      }else{
+        rv$mydata <- loaddata
+      }
+
 
       updateSelectInput(session, "response", choices = c(" ", colnames(rv$mydata)), selected = " ")
       updateSelectInput(session, "explanatory", choices = c(" ", colnames(rv$mydata)), selected = " ")
@@ -250,7 +260,6 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
       rv$rndExpCond3 <- input$rndExpCond3
 
       rv$varInt <- input$varInt
-      # rv$corARint <- input$corARint
 
       rv$modelname <- input$modelname
     })
