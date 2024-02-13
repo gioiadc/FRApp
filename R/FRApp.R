@@ -6,8 +6,8 @@
 #' @param ... shinyApp function options
 #'
 #' @return A list of objects that defines the Shiny app.
-#' @importFrom shiny navbarPage
-#' @importFrom shiny tabPanel
+#' @importFrom shiny fluidPage
+#' @importFrom shiny titlePanel
 #' @importFrom shiny h4
 #' @importFrom shiny fluidRow
 #' @importFrom shiny column
@@ -39,6 +39,7 @@
 #' @importFrom shiny renderPrint
 #' @importFrom shiny eventReactive
 #' @importFrom shiny showModal
+#' @importFrom shiny showNotification
 #' @importFrom shiny modalDialog
 #' @importFrom shiny removeModal
 #' @importFrom shiny renderPlot
@@ -57,6 +58,7 @@
 #' @importFrom nlme pdMat
 #' @importFrom nlme nlme
 #' @importFrom nlme nlmeControl
+#' @importFrom nlme corAR1
 #' @importFrom nlme corARMA
 #' @importFrom nlme ranef
 #' @importFrom nlme varIdent
@@ -82,45 +84,36 @@
 #' FRApp()
 #' }
 FRApp <- function(...) {
-  ui <- navbarPage(
-    "FRApp - FRAP data analysis using nonlinear mixed effects models",
-
+  ui <- fluidPage(
+    titlePanel("FRApp - Data analysis using exponential mixed effects models"),
+    hr(),
     ## ui ---------------------------------
-    tabPanel(
-      "Mixed Effects Model",
       h4("Data loading"),
       fluidRow(
-        column(
-          4, #"Select a csv file with ',' as field separator and '.' as a decimal separator",
-          fluidRow(style = "margin-top: 0px;",
-            column(
-              3,
-              selectInput("sep", "Field separator", choices=c(";",",","tab","space"),
-            selected = c(";"), width = "100%")),
-            column(
-              4,
-              selectInput("dec", "Decimal separator", choices=c(".",","),
-                        selected = c("."), width = "100%"))),
-fileInput("data", NULL,
-          accept = ".csv", placeholder = "Select a .csv file"),
-actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
-
-        column(8, verbatimTextOutput("contents"))
+        column(4,
+        div(style = "margin-left: 15px",
+      div(style="display:inline-block; margin-right: 10px;", selectInput("sep", "Field separator", choices=c(";",",","tab","space"),
+                                                    selected = c(";"), width = "100%")),
+      div(style="display:inline-block", selectInput("dec", "Decimal separator", choices=c(".",","),
+                                                    selected = c("."), width = "100%")),
+      fileInput("data", NULL, accept = ".csv", placeholder = "Select a .csv file"),
+      actionButton("example.click", "Load example data"))
       ),
+      column(8, verbatimTextOutput("contents"))),
       hr(),
       h4("Fit exponential mixed effects model"),
       sidebarPanel(
-        selectInput("response", "Response variable", multiple = FALSE, choices = NULL),
-        selectInput("explanatory", "Explanatory variable", multiple = FALSE, choices = NULL),
+        selectInput("response", "Response variable", multiple = F, choices = NULL),
+        selectInput("explanatory", "Explanatory variable", multiple = F, choices = NULL),
         hr(),
         h4("Hierarchical structure"),
-        selectInput("lvl1", "Level 1", multiple = F, choices = NULL, selected = NULL),
+        selectInput("lvl1", "Level 1", multiple = F, choices = NULL),
         checkboxGroupInput("rndEff1", "Random Effects - Lvl 1", choices = c("Asym", "R0", "lrc"), inline = TRUE),
         hr(style = "height:2px"),
-        selectInput("lvl2", "Level 2 (nested in Lvl 1)", multiple = F, choices = NULL, selected = NULL),
+        selectInput("lvl2", "Level 2 (nested in Lvl 1)", multiple = F, choices = NULL),
         checkboxGroupInput("rndEff2", "Random Effects - Lvl 2 ", choices = c("Asym", "R0", "lrc"), inline = TRUE),
         hr(style = "height:2px"),
-        selectInput("lvl3", "Level 3 (nested in Lvl 2)", multiple = F, choices = NULL, selected = NULL),
+        selectInput("lvl3", "Level 3 (nested in Lvl 2)", multiple = F, choices = NULL),
         checkboxGroupInput("rndEff3", "Random Effects - Lvl 3", choices = c("Asym", "R0", "lrc"), inline = TRUE),
         hr(),
         h4("Variance function"),
@@ -130,7 +123,7 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
         numericInput("corAR", "Autocorrelation order", 0, min = 0, step = 1),
         hr(),
         h4("Interactions"),
-        selectInput("experimentalCond", "Experimental condition", multiple = FALSE, choices = NULL, selected = NULL),
+        selectInput("experimentalCond", "Experimental condition", multiple = F, choices = NULL),
         p("interacting with"),
         checkboxGroupInput("fxExpCond", "Fixed effects", choices = c("Asym", "R0", "lrc"), inline = TRUE),
         checkboxGroupInput("rndExpCond1", "Lvl 1 - Random effects", choices = c("Asym", "R0", "lrc"), inline = TRUE),
@@ -143,47 +136,35 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
         actionButton("fit.click", "Fit the model"),
         div(style = "margin-top: 5px"),
         hr(),
+        h4("Model list"),
+        textInput("modelname", NULL, placeholder = "Model name"),
+        #fluidRow(
+          div(style="display:inline-block; margin-right: 10px;", actionButton("savefit.click", "Add to model list")),
+          div(style="display:inline-block", actionButton("resetfit.click", "Reset model list")),
+        #),
         div(style = "margin-top: 5px"),
-        fluidRow(
-          downloadButton("outputButtonReport", "Download report"),
-          div(style = "margin-top: 5px"),
-          downloadButton("outputButtonRData", "Download RData")
-        ),
         hr(),
-
-        # textInput("pdfname", "Filename", "My.pdf"),
-
-        textInput("modelname", "Model name", value = " "),
-        fluidRow(
-          actionButton("savefit.click", "Add to model list"),
-          div(style = "margin-top: 5px"),
-          actionButton("resetfit.click", "Reset model list")
-        ),
+        h4("Download"),
+        selectInput("modeldownload", "Select a model", choices = NULL, multiple = F),
+        #fluidRow(
+          div(style="display:inline-block; margin-right: 10px;", downloadButton("outputButtonReport", "Report")),
+          div(style="display:inline-block", downloadButton("outputButtonRData", "RData")),
+        #),
         hr(),
-        textOutput("fitSave")
       ),
       mainPanel(
         verbatimTextOutput("fitSummary"),
-        column(width = 6, plotOutput("fitPlotRes")),
-        column(width = 6, plotOutput("fitPlotQQ")),
-        verbatimTextOutput("fitInterv"),
+        fluidRow(column(width = 6, plotOutput("fitPlotRes", height="auto")),
+        column(width = 6, plotOutput("fitPlotQQ", height="auto")),
+        verbatimTextOutput("fitInterv")),
         hr(),
         conditionalPanel(
           condition = "req(fitList)",
           tableOutput("fitListTable")
         )
       )
-    ),
-    ## ui - tab4
-    tabPanel(
-      "Compare",
-      sidebarPanel(
-        selectInput("compare", "Compare models", choices = NULL, multiple = TRUE),
-        actionButton("compare.click", "Compare")
-      ),
-      mainPanel(tableOutput("fitListCompare"))
     )
-  )
+
 
   server <- function(input, output, session) {
     rv <- reactiveValues()
@@ -202,25 +183,25 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
 
       loaddata <- try(read.csv(file$datapath, header = T, stringsAsFactors = T,
                                 sep = sep, dec = dec)
-      )
+                      )
 
       if(inherits(loaddata, "try-error")) {
         showModal(modalDialog(paste0("Verify the field and the decimal separators"), easyClose = TRUE, footer = NULL))
         rv$mydata <- NULL
         }else{
         rv$mydata <- loaddata
-      }
+        }
 
       if(length(rv$mydata)<4){
         showModal(modalDialog(paste0("Number of imported variables is too low, verify the data"), easyClose = TRUE, footer = NULL))
       }
 
-      updateSelectInput(session, "response", choices = c(" ", colnames(rv$mydata)), selected = " ")
-      updateSelectInput(session, "explanatory", choices = c(" ", colnames(rv$mydata)), selected = " ")
-      updateSelectInput(session, "lvl1", choices = c(" ", colnames(rv$mydata)), selected = " ")
-      updateSelectInput(session, "lvl2", choices = c(" ", colnames(rv$mydata)), selected = " ")
-      updateSelectInput(session, "lvl3", choices = c(" ", colnames(rv$mydata)), selected = " ")
-      updateSelectInput(session, "experimentalCond", choices = c(" ", colnames(rv$mydata)), selected = " ")
+      updateSelectInput(session, "response", choices = c(Choose=" ", colnames(rv$mydata)), selected = " ")
+      updateSelectInput(session, "explanatory", choices = c(Choose=" ", colnames(rv$mydata)), selected = " ")
+      updateSelectInput(session, "lvl1", choices = c(Choose=" ", colnames(rv$mydata)), selected = " ")
+      updateSelectInput(session, "lvl2", choices = c(Choose=" ", colnames(rv$mydata)), selected = " ")
+      updateSelectInput(session, "lvl3", choices = c(Choose=" ", colnames(rv$mydata)), selected = " ")
+      updateSelectInput(session, "experimentalCond", choices = c(Choose=" ", colnames(rv$mydata)), selected = " ")
 
       updateCheckboxGroupInput(session, "rndEff1", choices = c("Asym", "R0", "lrc"), selected = NULL, inline = T)
       updateCheckboxGroupInput(session, "rndEff2", choices = c("Asym", "R0", "lrc"), selected = NULL, inline = T)
@@ -283,12 +264,12 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
 
       rv$variance <- "Exponential"
 
-      updateSelectInput(session, "response", choices = c(" ", colnames(rv$mydata)), selected = rv$responseName)
-      updateSelectInput(session, "explanatory", choices = c(" ", colnames(rv$mydata)), selected = rv$explanatoryName)
-      updateSelectInput(session, "lvl1", choices = c(" ", colnames(rv$mydata)), selected = rv$lvl1Name)
-      updateSelectInput(session, "lvl2", choices = c(" ", colnames(rv$mydata)), selected = rv$lvl2Name)
-      updateSelectInput(session, "lvl3", choices = c(" ", colnames(rv$mydata)), selected = rv$lvl3Name)
-      updateSelectInput(session, "experimentalCond", choices = c(" ", colnames(rv$mydata)), selected = rv$experimentalCondName)
+      updateSelectInput(session, "response", choices = c(Choose=" ", colnames(rv$mydata)), selected = rv$responseName)
+      updateSelectInput(session, "explanatory", choices = c(Choose=" ", colnames(rv$mydata)), selected = rv$explanatoryName)
+      updateSelectInput(session, "lvl1", choices = c(Choose=" ", colnames(rv$mydata)), selected = rv$lvl1Name)
+      updateSelectInput(session, "lvl2", choices = c(Choose=" ", colnames(rv$mydata)), selected = rv$lvl2Name)
+      updateSelectInput(session, "lvl3", choices = c(Choose=" ", colnames(rv$mydata)), selected = rv$lvl3Name)
+      updateSelectInput(session, "experimentalCond", choices = c(Choose=" ", colnames(rv$mydata)), selected = rv$experimentalCondName)
 
       updateCheckboxGroupInput(session, "rndEff1", selected = c("Asym", "R0", "lrc"))
       updateCheckboxGroupInput(session, "rndEff2", selected = c("R0"))
@@ -302,12 +283,12 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
     })
 
     observe({
-      updateSelectInput(session, "response", choices = c(" ", colnames(rv$mydata)), selected = rv$responseName)
-      updateSelectInput(session, "explanatory", choices = c(" ", colnames(rv$mydata)), selected = rv$explanatoryName)
-      updateSelectInput(session, "lvl1", choices = c(" ", colnames(rv$mydata)), selected = rv$lvl1Name)
-      updateSelectInput(session, "lvl2", choices = c(" ", colnames(rv$mydata)), selected = rv$lvl2Name)
-      updateSelectInput(session, "lvl3", choices = c(" ", colnames(rv$mydata)), selected = rv$lvl3Name)
-      updateSelectInput(session, "experimentalCond", choices = c(" ", colnames(rv$mydata)), selected = rv$experimentalCondName)
+      updateSelectInput(session, "response", choices = c(Choose=" ", colnames(rv$mydata)), selected = rv$responseName)
+      updateSelectInput(session, "explanatory", choices = c(Choose=" ", colnames(rv$mydata)), selected = rv$explanatoryName)
+      updateSelectInput(session, "lvl1", choices = c(Choose=" ", colnames(rv$mydata)), selected = rv$lvl1Name)
+      updateSelectInput(session, "lvl2", choices = c(Choose=" ", colnames(rv$mydata)), selected = rv$lvl2Name)
+      updateSelectInput(session, "lvl3", choices = c(Choose=" ", colnames(rv$mydata)), selected = rv$lvl3Name)
+      updateSelectInput(session, "experimentalCond", choices = c(Choose=" ", colnames(rv$mydata)), selected = rv$experimentalCondName)
     })
 
 
@@ -436,22 +417,22 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
               }
             }
 
-            showModal(modalDialog("Fitting the model...", footer = NULL))
+            showModal(modalDialog("Fitting the model... \n Please wait patiently, this may take several minutes", footer = NULL))
 
             # Variance and AR
             # constant variance and no AR
             if (rv$variance == "Constant" & !rv$varInt) {
               if (rv$corAR == 0) {
-                modelFit <- try(nlme(formula(nlme.formula),
+                modelFit <- tryCatch(nlme(formula(nlme.formula),
                   data = rv$mydataFit, fixed = fixed.formula, groups = groups, random = rnd,
-                  start = start, control = nlmeControl(pnlsMaxIter = 200)
-                ))
+                  start = start, control = nlmeControl(pnlsMaxIter = 200)),
+                  error=function(e) e, warning=function(w) w)
               } else {
                 #  if(!rv$corARint){
-                modelFit <- try(nlme(formula(nlme.formula),
+                modelFit <- tryCatch(nlme(formula(nlme.formula),
                   data = rv$mydataFit, fixed = fixed.formula, groups = groups, random = rnd,
-                  start = start, correlation = corARMA(p = rv$corAR, q = 0), control = nlmeControl(pnlsMaxIter = 200)
-                ))
+                  start = start, correlation = corARMA(p = rv$corAR, q = 0), control = nlmeControl(pnlsMaxIter = 200)),
+                  error=function(e) e, warning=function(w) w)
                 # }else{
                 #  modelFit <- try(nlme(formula(nlme.formula), data = rv$mydataFit, fixed = fixed.formula, groups = groups, random = rnd,
                 #                       start = start, correlation = corARMA(form = ~rv$explanatoryName|rv$experimentalCondName, p=rv$corAR, q = 0),
@@ -468,28 +449,42 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
               if (rv$variance == "ConstantPower") varFun <- get("varConstPower")
               if (rv$variance == "Exponential") varFun <- get("varExp")
               if (rv$corAR == 0) {
-                modelFit <- try(nlme(formula(nlme.formula),
+                modelFit <- tryCatch(nlme(formula(nlme.formula),
                   data = rv$mydataFit, fixed = fixed.formula, groups = groups, random = rnd,
-                  start = start, weights = varFun(form = varForm), control = nlmeControl(pnlsMaxIter = 200)
-                ))
+                  start = start, weights = varFun(form = varForm), control = nlmeControl(pnlsMaxIter = 200)),
+                  error=function(e) e, warning=function(w) w)
               } else {
+                if(rv$corAR==1){
+                  modelFit <- tryCatch(nlme(formula(nlme.formula),
+                                       data = rv$mydataFit, fixed = fixed.formula, groups = groups, random = rnd,
+                                       start = start, weights = varFun(form = varForm), correlation = corAR1(), control = nlmeControl(pnlsMaxIter = 200, maxIter = 200)),
+                                       error=function(e) e, warning=function(w) w)
+                } else {
                 #  if(!rv$corARint){
-                modelFit <- try(nlme(formula(nlme.formula),
+                modelFit <- tryCatch(nlme(formula(nlme.formula),
                   data = rv$mydataFit, fixed = fixed.formula, groups = groups, random = rnd,
-                  start = start, weights = varFun(form = varForm), correlation = corARMA(p = rv$corAR, q = 0), control = nlmeControl(pnlsMaxIter = 200)
-                ))
+                  start = start, weights = varFun(form = varForm), correlation = corARMA(p = rv$corAR, q = 0), control = nlmeControl(pnlsMaxIter = 200, maxIter = 200)),
+                  error=function(e) e, warning=function(w) w)
+                }
                 #  }else{
                 #  modelFit <- try(nlme(formula(nlme.formula), data = rv$mydataFit, fixed = fixed.formula, groups = groups, random = rnd,
                 #                       start = start, weights = varFun(form = varForm), correlation = corARMA(form = ~1|rv$experimentalCondName, p=rv$corAR, q = 0), control = nlmeControl(pnlsMaxIter = 200)))
                 # }
               }
             }
-
             removeModal()
-            if (is(modelFit) == "try-error") {
-              showModal(modalDialog(attr(modelFit, which = "condition"), easyClose = TRUE, footer = NULL))
+            if(is(modelFit,"warning")){
+              showModal(modalDialog(paste0(conditionMessage(modelFit)), easyClose = TRUE, footer = NULL))
               modelFit <- NULL
             }
+            if(is(modelFit,"error")){
+              showModal(modalDialog(paste0(conditionMessage(modelFit)), easyClose = TRUE, footer = NULL))
+              modelFit <- NULL
+            }
+            # if (is(modelFit) == "try-error") {
+            #   showModal(modalDialog(attr(modelFit, which = "condition"), easyClose = TRUE, footer = NULL))
+            #   modelFit <- NULL
+            # }
             modelFit
           }
         }
@@ -506,51 +501,22 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
       req(fit())
       rv$fitPlotRes <- nlme::plot.lme(fit(), pch = 21, idResType = "n")
       nlme::plot.lme(fit(), pch = 21, idResType = "n")
+    }, height = function() {
+      session$clientData$output_fitPlotRes_width
     })
+
     output$fitPlotQQ <- renderPlot({
       req(fit())
       rv$fitPloQQ <- qqnorm(fit(), ~ resid(., type = "n"), abline = c(0, 1))
       qqnorm(fit(), ~ resid(., type = "n"), abline = c(0, 1))
+    }, height = function() {
+      session$clientData$output_fitPlotRes_width
     })
     output$fitInterv <- renderPrint({
       req(fit())
       rv$fitInterv <- intervals(fit())
       intervals(fit())
     })
-
-    output$outputButtonReport <- downloadHandler(
-      filename = function() {
-        paste("FRAPreport", format(Sys.time(), "%Y%m%d-%H%M%S"), ".pdf", sep = "")
-      },
-      content = function(file) {
-        req(fit())
-        plotRes <- rv$fitPlotRes
-        plotQQ <- rv$fitPloQQ
-        pdf(file, paper = "a4")
-        textplot(capture.output(rv$fitSumm), valign = "top", fixed.width = F)
-        textplot(capture.output(rv$fitInterv), valign = "top", fixed.width = F)
-        par(mfrow = c(1, 2))
-        plotRes
-        plotQQ
-        dev.off()
-      }
-    )
-
-    output$outputButtonRData <- downloadHandler(
-      filename = function() {
-        paste("FRAPRData", format(Sys.time(), "%Y%m%d-%H%M%S"), ".RData", sep = "")
-      },
-      content = function(file) {
-        req(fit())
-        pred <- predict(fit(), level = 0:rv$nhier)
-        raneff <- ranef(fit(), level = 0:rv$nhier)
-        fit <- fit()
-        data <- rv$mydataFit
-        CI <- rv$fitInterv
-        resid <- residuals(fit(), levels = rv$nhier)
-        save(fit, data, pred, CI, resid, raneff, file = file)
-      }
-    )
 
     # save the fitted model
     rv$counter <- 0
@@ -559,23 +525,35 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
       req(fit())
       if (rv$modelname == " ") {
         showModal(modalDialog(paste0("The name of the model is missing"), easyClose = TRUE, footer = NULL))
+      }else{
+      if (rv$modelname %in% names(rv$fitList)) {
+        showModal(modalDialog(paste0("Duplicated name, change the name of the model"), easyClose = TRUE, footer = NULL))
       } else {
-        if (rv$modelname %in% names(rv$fitList)) {
-          showModal(modalDialog(paste0("Change the name of the model"), easyClose = TRUE, footer = NULL))
-        } else {
-          rv$counter <- rv$counter + 1
-          rv$fitList[[rv$counter]] <<- fit()
-          names(rv$fitList)[[rv$counter]] <<- rv$modelname
+        rv$counter <- rv$counter + 1
+        rv$fitList[[rv$counter]] <<- fit()
+        names(rv$fitList)[[rv$counter]] <<- rv$modelname
+
+        if(rv$counter==1){
+          output$fitListTable <- renderTable({
+          cbind.data.frame(
+            "Model" = c(1:rv$counter),
+            "Model name" = names(rv$fitList)
+          )
+        })
+        }
+        if(rv$counter>1){
+          fitListSel <- rv$fitList
           output$fitListTable <- renderTable({
             cbind.data.frame(
-              "Model" = c(1:rv$counter),
-              "Model name" = names(rv$fitList)
+              "Name" = names(fitListSel),
+              eval(parse(text = paste("anova(", paste("fitListSel[[", 1:length(fitListSel), "]]", sep = "", collapse = ","), ")")))[, -1]
             )
           })
-          output$fitSave <- renderText({
-            paste("Model", rv$modelname, "added to model list")
-          })
         }
+        showNotification(paste0(rv$modelname, " added to model list"),
+                         type = "message", duration = 5)
+      }
+
         rv$modelname <- " "
         updateTextInput(session, "modelname", value = " ")
       }
@@ -585,27 +563,55 @@ actionButton("example.click", "Load example data"), style = "margin-top: 10px"),
     observeEvent(input$resetfit.click, {
       rv$fitList <- NULL
       output$fitListTable <- renderTable({})
-      output$fitSave <- renderText({
-        paste("Model list is empty")
-      })
+      showNotification("Model list is empty", type = "message", duration = 5)
       rv$counter <- 0
     })
 
-    ## output compare tab ---------------------
+    ## Download tab ---------------------
     observe({
-      updateSelectInput(session, "compare", choices = names(rv$fitList))
+      updateSelectInput(session, "modeldownload", choices = c(" ", names(rv$fitList)))
     })
 
-    observeEvent(input$compare.click, {
-      selectedModels <- which(names(rv$fitList) %in% input$compare)
-      fitListSel <- rv$fitList[selectedModels]
-      output$fitListCompare <- renderTable({
-        cbind.data.frame(
-          "Name" = names(fitListSel),
-          eval(parse(text = paste("anova(", paste("fitListSel[[", 1:length(fitListSel), "]]", sep = "", collapse = ","), ")")))[, -1]
-        )
-      })
-    })
+    output$outputButtonReport <- downloadHandler(
+      filename = function() {
+        paste("FRAppReport", format(Sys.time(), "%Y%m%d-%H%M%S"), ".pdf", sep = "")
+      },
+      content = function(file) {
+        req(names(rv$fitList) %in% input$modeldownload)
+        selectedModel <- which(names(rv$fitList) %in% input$modeldownload)
+        fitListSel <- rv$fitList[[selectedModel]]
+
+        plotRes <- plot(fitListSel, pch = 21, idResType = "n")
+        plotQQ <- qqnorm(fitListSel, ~ resid(., type = "n"), abline = c(0, 1))
+        pdf(file, paper = "a4")
+        textplot(capture.output(summary(fitListSel)), valign = "top", fixed.width = F, cex = 0.7)
+        textplot(capture.output(intervals(fitListSel)), valign = "top", fixed.width = F, cex = 0.7)
+        par(mfrow = c(1, 2))
+        print(plotRes)
+        print(plotQQ)
+        dev.off()
+      }
+    )
+
+    output$outputButtonRData <- downloadHandler(
+      filename = function() {
+        paste("FRAPRData", format(Sys.time(), "%Y%m%d-%H%M%S"), ".RData", sep = "")
+      },
+      content = function(file) {
+        req(names(rv$fitList) %in% input$modeldownload)
+        selectedModel <- which(names(rv$fitList) %in% input$modeldownload)
+        fitListSel <- rv$fitList[[selectedModel]]
+
+        fit <- fitListSel
+        dataAug <- cbind.data.frame(rv$mydata,fitListSel$groups)
+        CI <- intervals(fitListSel)
+        resid <- residuals(fitListSel, levels = ncol(fitListSel$groups))
+        pred <- predict(fitListSel, level = 0:ncol(fitListSel$groups))
+        raneff <- ranef(fitListSel, level = 0:ncol(fitListSel$groups))
+        save(fit, fitListSel$groups, pred, CI, resid, raneff, file = file)
+      }
+    )
+
   }
 
   # Run the application
