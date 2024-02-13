@@ -148,6 +148,8 @@ Loading the example data, the response variable y, the fluorescence intensity, a
 
 The following list highlights the main characteristics of an exponential mixed-effect model that can be implemented in the FRApp and link them to the FRAP data analysis.
 
+Fit is perfomed with the function <tt>`nlme`</tt>.
+
 **Fixed effects**<br/>
 For each unit, the response variable $y$ is modeled through an asymptotic regression function on time $t$, that is,
 $$y_i = Asym+(R0−Asym)exp(−exp(lrc)t_i)+\epsilon_i,\quad  \text{for } i = 1,...,n$$
