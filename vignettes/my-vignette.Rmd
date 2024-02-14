@@ -6,7 +6,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{my-vignette}
+  %\VignetteIndexEntry{FRApp Package Vignette: Analyzing FRAP Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 toc_float: true
@@ -256,9 +256,6 @@ The *Download RData* button allows you to export an RData file containing six ob
 
 You can open the Rdata file with RStudio, and use related objects to create further graphs, e.g., curves estimated at different hierarchical levels (using the pred object), residual (with resid) or random effects graphs (with raneff).
 
-<center>
-![FRApp front page: Download report and RData](../man/figures/FRApp7.png){width=90%}
-</center>
 
 ## References
 
