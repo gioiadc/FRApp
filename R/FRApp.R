@@ -85,7 +85,7 @@
 #' }
 FRApp <- function(...) {
   ui <- fluidPage(
-    titlePanel("FRApp - Data analysis using exponential mixed effects models"),
+    titlePanel("FRApp - Data analysis using exponential mixed-effects models"),
     hr(),
     ## ui ---------------------------------
       h4("Data loading"),
@@ -595,7 +595,7 @@ FRApp <- function(...) {
 
     output$outputButtonRData <- downloadHandler(
       filename = function() {
-        paste("FRAPRData", format(Sys.time(), "%Y%m%d-%H%M%S"), ".RData", sep = "")
+        paste("FRAppRData", format(Sys.time(), "%Y%m%d-%H%M%S"), ".RData", sep = "")
       },
       content = function(file) {
         req(names(rv$fitList) %in% input$modeldownload)
