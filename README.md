@@ -5,17 +5,17 @@
 <!-- badges: end -->
 
 **FRApp** is an R package and an R-based Shiny application providing a
-user-friendly interactive interface to streamline the data analysis by
-fitting nonlinear mixed-effects regression models with an asymptotic
-exponential functional relationship on data with a hierarchical
-structure. The package provides a comprehensive suite of tools tailored
-for efficient data analysis and visualization.
+user-friendly interactive interface to streamline the data analysis
+derived by fitting nonlinear mixed-effects regression models with an
+asymptotic exponential functional relationship on data with a
+hierarchical structure. The package provides a comprehensive suite of
+tools tailored for efficient data analysis and visualization.
 
 The package includes data from Fluorescence Recovery After
 Photobleaching (FRAP) experiments on actin dynamics in dendritic spines.
 
-To explore all the functionalities of the **FRApp**, a comprehensive
-guide is available in a dedicated vignette.
+To explore all the functionalities of **FRApp**, a comprehensive guide
+is available in a dedicated vignette.
 
 ## How to install **FRApp**
 
@@ -26,7 +26,7 @@ You can install the package executing the following commands from the
 RStudio console:
 
 ``` r
-install.package("FRApp")
+install.packages("FRApp")
 ```
 
 You can install the development version of **FRApp** from
@@ -46,7 +46,7 @@ command:
 library(FRApp)
 ```
 
-You must execute this command every time you restart Rstudio.
+You must execute this command every time you restart RStudio.
 
 To launch the Shiny app, copy and paste the following code in the
 console:
@@ -57,21 +57,23 @@ FRApp()
 
 The application opens automatically in the browser.
 
-**FRApp** allows you to
+**FRApp** allows you to:
 
-- Load the data
+- load the data
 
-- Estimate and compare exponential mixed-effects models
+- estimate and compare exponential mixed-effects models
 
-- Print a model report and export the data and the model
+- print a model report
+
+- export the data and the model corresponding objects.
 
 <center>
 
 <figure>
-<img src="man/figures/FRApp1.png" style="width:80.0%"
-alt="FRApp front page: Mixed Effects Model" />
-<figcaption aria-hidden="true">FRApp front page: Mixed Effects
-Model</figcaption>
+<img src="man/figures/FRApp1.png" style="width:90.0%"
+alt="FRApp front page: mixed-effects model" />
+<figcaption aria-hidden="true">FRApp front page: mixed-effects
+model</figcaption>
 </figure>
 
 </center>
@@ -89,26 +91,27 @@ right side of the application:
 
 - approximate 95% confidence intervals of the parameters of interest.
 
-Fit is perfomed with the function <tt>`nlme`</tt>.
+Model fitting is performed with the function <tt>`nlme`</tt>.
 
 You can save models for model comparison with the button **Add to model
-list**. Saved models must have different names. When multiple models are
-saved, the table at the bottom of the page displays comparisons among
-the saved models using AIC, BIC, and likelihood ratio tests.
+list** in the *Model list* section. Saved models must have different
+names. When multiple models are saved, the table at the bottom of the
+page displays comparisons between the saved models using AIC, BIC, and
+likelihood ratio test criteria.
 
 The **Reset model list** button allows you to delete the saved models
 from the list.
 
-From the drop-down menu in the Download section, it is possible to
+From the drop-down menu in the *Download* section, it is possible to
 select a model saved in the model list and download a report and some
 model’s objects.
 
-The **Download Report** button allows you to export the results printed
-in the application (model summary, residual graphs, and intervals) into
-a PDF document.
+In the *Download* section, the **Report** button allows you to export
+the results printed in the application (model summary, residual graphs,
+and intervals) into a PDF document.
 
-The **Download RData** button allows you to export an RData file
-containing six objects:
+The **RData** button allows you to export an RData file containing six
+objects:
 
 - data: the dataset in the format used for the analysis
 
@@ -125,12 +128,12 @@ containing six objects:
 
 ## References
 
-As a reference to the construction of the model and the different
+As a reference for the construction of the model and the different
 options to specify, we refer to the book: Pinheiro, J., & Bates, D.
 (2006). Mixed-effects models in S and S-PLUS. Springer science &
 business media.
 
-As a reference to the FRAP data analysis example: Di Credico, G.,
-Pelucchi, S., Pauli, F., Di Luca, M., Marcello, E., & Edefonti, V.
+As a reference for the FRAP data analysis example: Di Credico, G.,
+Pelucchi, S., Pauli, F., Stringhi, R., Marcello, E., & Edefonti, V.
 Nonlinear mixed-effects models to analyze actin dynamics in dendritic
 spines.

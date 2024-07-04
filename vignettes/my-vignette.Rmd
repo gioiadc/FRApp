@@ -88,7 +88,7 @@ in the three nested levels:
   
 - *Culture.id*: Identifies the culture
 - *neuron*: Identifies the neuron and its genetic condition. When combined with 
-Culture.id, the neuron variable identifies uniquely each neuron. Here, the highest level where the experimental condition applies id neuron.
+Culture.id, the neuron variable identifies uniquely each neuron. Here, the highest level where the experimental condition applies is neuron.
 - *spine.ID*: Identifies the spine. When combined with Culture.id and neuron 
 identifies uniquely each spine.
 
@@ -111,24 +111,24 @@ FRApp()
 ![FRApp front page: mixed-effects model tab](../man/figures/FRApp1.png){width=90%}
 </center>
 
-The application automatically opens in the browser. While the application is running, it is not possible to havee access to the console. To close the application and get access to the R console again, you have to close the application by clicking on the red stop button located in the top right corner of the frame of the R console.
+The application automatically opens in the browser. While the application is running, it is not possible to have access to the console. To close the application and get access to the R console again, you have to close the application by clicking on the red stop button located in the top right corner of the frame of the R console.
 
-The application allows you to: 
+The application allows for: 
   
-- [Load the data] 
+- [Loading the data] 
 
-- [Estimate and compare exponential mixed-effects models]
+- [Estimating and comparing exponential mixed-effects models]
 
-- [Print a model report and export the data and the model] 
+- [Printing a model report and exporting the data and the model] 
 
 
-### Load the data
+### Loading the data
 
 The FRApp application accepts the csv files format. By default, it uses the semicolon as the field separator and the period as the decimal separator, but you can select different separators from the drop-down menu. 
 
 The first line of the file must contain the variable names.
 
-The *Browse…* button allows you to load your own data file to be analyzed. Check that your import is correct by looking on the right at the summary description of the variables and number of observations imported on the right.
+The *Browse…* button allows you to load your own data file to be analyzed. Check that your import is correct by looking on the right at the summary description of the variables and number of observations imported.
 
 Please, double-check variable types:
 
@@ -146,9 +146,9 @@ In the case of the example data, the response variable y, the fluorescence inten
 ![FRApp front page: loading the example data](../man/figures/FRApp2.png){width=90%}
 </center>
 
-### Estimate and compare exponential mixed-effects models
+### Estimating and comparing exponential mixed-effects models
 
-The following list highlights the main characteristics of an exponential mixed-effects model that can be implemented in FRApp and are highlighted in the following and shown within our FRAP example.
+The following list highlights the main characteristics of an exponential mixed-effects model that can be implemented in FRApp and within our FRAP example.
 
 Model fitting is perfomed with the <tt>`nlme`</tt> function.
 
@@ -159,14 +159,14 @@ This asymptotic function is characterized by three parameters: $R0$, the respons
 
 - FRApp: Begin by selecting the response variable and the explanatory variable from the drop-down menu.<br/>
 
-- Example data: In the context of our example analysis, the fluorescence intensity $y$ was the response variable, and the $time$ was the explanatory variable. The model parameters had a biological interpretation in describing the actin cytoskeleton dynamics in spines. Specifically, $R0$ represented the fluorescence intensity after photobleaching, $Asym$ denoted the fluorescence intensity recovered in time, and $lrc$ measured how fast the fluorescence intensity recovered.
+- Example data: In the context of our example analysis, the fluorescence intensity $y$ was the response variable, and $time$ was the explanatory variable. The model parameters had a biological interpretation in describing the actin cytoskeleton dynamics in spines. Specifically, $R0$ represented the fluorescence intensity after photobleaching, $Asym$ denoted the fluorescence intensity recovered in time, and $lrc$ measured how fast the fluorescence intensity recovered.
 
 
 **Random effects**<br/>
 Mixed-effects models combine fixed effects describing the population mean and random effects accounting for variation among groups. When the data show a nested structure, the hierarchy can be easily handled specifying random effects for each level of the hierarchy. In the FRApp, random effects are assumed to be independent and normally distributed.<br/>
 
 - FRApp: Choose the hierarchical structure levels, starting with the highest level. You can specify up to three hierarchical levels. For each specified hierarchical level, you must select at least one random effect. 
-There is no a priori rule for constructing the random effect structure. You can begin by defining a structure that best captures the expected variability between groups. Alternatively, you can fit the initial model all possible random effects and adjust it by removing unnecessary random effects, i.e. those with variability almost close to zero.
+There is no a priori rule for constructing the random effect structure. You can begin by defining a structure that best captures the expected variability between groups. Alternatively, you can fit the initial model with all possible random effects and adjust it by removing unnecessary random effects, i.e. those with variability almost close to zero.
 <br/>
 
 - Example data: In our case, the parameters $Asym$, $lrc$, and $R0$ were expected to vary across cultures, neurons, and spines, which were organized in a hierarchical structure, i.e., spines (level 3) within neurons (level 2) within cultures (level 1). Therefore, we could specify a random effect for each level-specific parameter to capture the variability among entities belonging to the same group. For instance, the random effect on $Asym$ at the culture level described the variability among asymptotes of different cultures.
@@ -180,19 +180,19 @@ When model residuals, which are the difference between fitted and observed value
 - Example data: Through visual inspection of the residuals, we detected heteroscedasticity, which we modeled with a non-constant variance function. Our example data were recorded over time, so we anticipated the presence of temporal dependence among the data.
 
 **Interactions**<br/>
-Interactions with an experimental condition can be included with different model components: random effects, fixed effects, and the variance structure. Interactions allow to estimate effects for different experimental conditions.<br/>
+Interactions with an experimental condition can be included with different model components: random effects, fixed effects, and the variance structure. Interactions allow to estimate specific effects for each experimental condition.<br/>
 
 - FRApp: Select the variable representing the experimental condition from the drop-down menu and choose the interaction to be included in the model.<br/>
 
 - Example data: The experimental condition, here indicated as genetic.id, was the main effect of interest in the data analyzed in the paper.
 
-It's advisable to move simplest structures towards greater model complexity. Explore model diagnostics including residual plots, random effects normality, and serial correlation.
+It's advisable to move from simplest structures towards greater model complexity by exploring model diagnostics including residual plots, random effects normality, and serial correlation.
 
 You can save models for model comparison. Saved models must have different names. When multiple models are saved, the table at the bottom of the page displays comparisons among saved models as based on AIC, BIC, and likelihood ratio tests.
 
 The *Reset model list* button allows you to delete the saved models from the list.
 
-### Print a model report and export the data and the model
+### Printing a model report and exporting the data and the model
 
 From the drop-down menu in the Download section, you can select a saved model from the list and download a report and some model's objects.
 
@@ -220,14 +220,14 @@ You can open the Rdata file with RStudio, and use the included objects to create
 
 In this section, we walk through our example analysis of the FRAP dataset using FRApp. 
 
-**Model 1.** We start by fitting a model with three random effects at Culture level and one random effect on the $Asym$ parameter for the neuron and spine levels. We consider a constant variance function and no temporal dependence on the error term. Also we do not evaluate interactions with the genetic condition.<br/> 
+**Model 1.** We start by fitting a model with three random effects at culture level and one random effect on the $Asym$ parameter for the neuron and spine levels. We consider a constant variance function and no temporal dependence on the error term. Also we do not evaluate interactions with the genetic condition.<br/> 
 
 At the end of the estimation process, we obtain:
 
 -  a model summary that includes parameter estimates and model information;
 
 - a scatterplot of residuals vs. estimated values and a quantile-quantile plot of the residuals, useful to assess model diagnostics. In the scatterplot, residuals should exhibit randomness, spreading approximately evenly across the range of predicted values.
-In the quantile-quantile plot, a straight diagonal line suggests that the residuals are normally distributed;
+In the quantile-quantile plot, a diagonal line suggests that the residuals are normally distributed;
 
 - the approximate 95% confidence intervals of the parameters of interest.
 
@@ -238,7 +238,7 @@ We save this model as "Model 1" with the button *Add to model list*.
 </center>
 
 
-**Model 2.** We update the random effect structure by fitting a model with the final random effects structure selected in the paper: three random effects at Culture and spine levels and one random effect on the R0 parameter at the neuron level.<br/> 
+**Model 2.** We update the random effect structure by fitting a model with the final random effects structure selected in the paper: three random effects at culture and spine levels and one random effect on the R0 parameter at the neuron level.<br/> 
 We save this model as "Model 2" with the button *Add to model list*.
 
 Under the confidence intervals, a table showing AIC, BIC, and likelihood ratio test criteria appears. According to the showed criteria, Model 2 outperforms Model 1.
@@ -251,7 +251,7 @@ However, the residuals plot shows the presence of heteroscedasticity.
 
 **Model 3.** We fit the final model selected in the paper, by choosing the exponential function on the variance interacting with the experimental condition, and by adding an AR model of order one.<br/>
 We save this model with the name "Model 3" by pressing the *Add to model list* button.
-According to the criteria in the comparison table, Model 3 is outperforms to Model 2.
+According to the criteria in the comparison table, Model 3 outperforms Model 2.
 
 <center>
 ![FRApp front page: Model 3](../man/figures/FRApp6.png){width=90%}
@@ -264,4 +264,4 @@ We download the Model 3 report using the *Download report* button.
 
 As a reference for the construction of the model and the different options to specify, we refer to the book: Pinheiro, J., & Bates, D. (2006). Mixed-effects models in S and S-PLUS. Springer science & business media.
 
-As a reference for the FRAP data analysis example: Di Credico, G., Pelucchi, S., Pauli, F., Di Luca, M., Marcello, E., & Edefonti, V. Nonlinear mixed-effects models to analyze actin dynamics in dendritic spines.
+As a reference for the FRAP data analysis example: Di Credico, G., Pelucchi, S., Pauli, F., Stringhi, R., Marcello, E., & Edefonti, V. Nonlinear mixed-effects models to analyze actin dynamics in dendritic spines.

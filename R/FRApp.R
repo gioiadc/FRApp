@@ -169,9 +169,12 @@ FRApp <- function(...) {
   server <- function(input, output, session) {
     rv <- reactiveValues()
 
+    observe({
+      print(str(rv$fitList))
+    })
+
     observeEvent(input$data, {
       file <- input$data
-
       req(file)
       if(input$sep==";")  sep <- ";"
       if(input$sep==",")  sep <- ","
@@ -603,12 +606,12 @@ FRApp <- function(...) {
         fitListSel <- rv$fitList[[selectedModel]]
 
         fit <- fitListSel
-        dataAug <- cbind.data.frame(rv$mydata,fitListSel$groups)
+        dataAug <- cbind.data.frame(rv$mydata,fit$groups)
         CI <- intervals(fitListSel)
         resid <- residuals(fitListSel, levels = ncol(fitListSel$groups))
         pred <- predict(fitListSel, level = 0:ncol(fitListSel$groups))
         raneff <- ranef(fitListSel, level = 0:ncol(fitListSel$groups))
-        save(fit, fitListSel$groups, pred, CI, resid, raneff, file = file)
+        save(fit, dataAug, pred, CI, resid, raneff, file = file)
       }
     )
 
