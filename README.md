@@ -133,7 +133,8 @@ options to specify, we refer to the book: Pinheiro, J., & Bates, D.
 (2006). Mixed-effects models in S and S-PLUS. Springer science &
 business media.
 
-As a reference for the FRAP data analysis example: Di Credico, G.,
-Pelucchi, S., Pauli, F., Stringhi, R., Marcello, E., & Edefonti, V.
-Nonlinear mixed-effects models to analyze actin dynamics in dendritic
-spines.
+As a reference for the FRAP data analysis example: 
+Di Credico, G., Pelucchi, S., Pauli, F., Stringhi, R., 
+Marcello, E., Edefonti, V. Nonlinear mixed-effects models to 
+analyze actin dynamics in dendritic spines. *Scientific Reports* 
+(2025) https://doi.org/10.1038/s41598-025-87154-w
