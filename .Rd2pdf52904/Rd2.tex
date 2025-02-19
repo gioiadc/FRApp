@@ -1,0 +1,143 @@
+\nonstopmode{}
+\documentclass[a4paper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\makeatletter\@ifl@t@r\fmtversion{2018/04/01}{}{\usepackage[utf8]{inputenc}}\makeatother
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Package `FRApp'}}
+\par\bigskip{\large \today}
+\end{center}
+\ifthenelse{\boolean{Rd@use@hyper}}{\hypersetup{pdftitle = {FRApp: FRAP Data Analysis Using Nonlinear Mixed Effect Models with Shiny}}}{}
+\ifthenelse{\boolean{Rd@use@hyper}}{\hypersetup{pdfauthor = {Gioia Di Credico}}}{}
+\begin{description}
+\raggedright{}
+\item[Type]\AsIs{Package}
+\item[Title]\AsIs{FRAP Data Analysis Using Nonlinear Mixed Effect Models with Shiny}
+\item[Version]\AsIs{1.0.0}
+\item[Description]\AsIs{Analysis of Fluorescence Recovery After Photobleaching (FRAP) 
+experiments using nonlinear mixed-effects regression models and analysis of 
+the results. FRApp is not limited to the analysis of FRAP experiments only. 
+Any nonlinear mixed-effects models with an asymptotic exponential functional 
+relationship to hierarchical data in various domains can be fitted. 
+The analysis of data available in the package is presented in Di Credico, G., 
+Pelucchi, S., Pauli, F. et al. (2025) <}\Rhref{https://doi.org/10.1038/s41598-025-87154-w}{doi:10.1038/s41598-025-87154-w}\AsIs{>.}
+\item[License]\AsIs{GPL (>= 3)}
+\item[Encoding]\AsIs{UTF-8}
+\item[LazyData]\AsIs{true}
+\item[Imports]\AsIs{nlme, shiny, gplots, grDevices, graphics, methods, stats, utils}
+\item[Roxygen]\AsIs{list(markdown = TRUE)}
+\item[RoxygenNote]\AsIs{7.3.2}
+\item[NeedsCompilation]\AsIs{no}
+\item[Suggests]\AsIs{knitr,
+rmarkdown,
+testthat (>= 3.0.0)}
+\item[Config/testthat/edition]\AsIs{3}
+\item[Depends]\AsIs{R (>= 2.10)}
+\item[VignetteBuilder]\AsIs{knitr, rmarkdown}
+\item[URL]\AsIs{}\url{https://github.com/gioiadc/FRApp}\AsIs{}
+\item[BugReports]\AsIs{}\url{https://github.com/gioiadc/FRApp/issues}\AsIs{}
+\end{description}
+\Rdcontents{Contents}
+\HeaderA{FRAPdata}{FRAP analysis dataset}{FRAPdata}
+\keyword{datasets}{FRAPdata}
+%
+\begin{Description}
+The dataset provides 65 measures of fluorescence intensity equally spaced in time over a period of 100 seconds for 132 dendritic spines, for a total of 8580 observations.
+Data presents a nested hierarchical structure: spines belongs to 54 neurons, grouped in 6 cultures.
+The number of spines within neurons, and of neurons within cultures is not constant.
+Experimental condition is applied to 28 neurons (CAP2-shRNA, 71 spines), whereas 26 are controls (SCR, 61 spines).
+The dataset is a subset of the original version where spines with fluorescence intensity larger than 0.6 at time 0 have been excluded.
+For a comprehensive description of the data and of the data cleaning steps, please refer to the paper below.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+FRAPdata
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+%
+\begin{SubSection}{\code{FRAPdata}}
+
+A data frame with 8580 rows and 6 columns:
+\begin{description}
+
+\item[Culture.id] Culture id, from 1 to 6
+\item[genetic.id] Experimental condition, SCR for control and SH for CAP2-shRNA
+\item[neuron] Neuron id and experimental condition, nested within cultures
+\item[spine.ID] Spine id, nested within neurons
+\item[time] Time, from 0 to 99.84
+\item[y] Fluorescence intensities
+
+\end{description}
+
+\end{SubSection}
+
+\end{Format}
+%
+\begin{Source}
+Di Credico, G., Pelucchi, S., Pauli, F. et al. Nonlinear mixed-effects models to analyze actin dynamics in dendritic spines. Sci Rep 15, 5790 (2025). https://doi.org/10.1038/s41598-025-87154-w
+\end{Source}
+\HeaderA{FRApp}{FRApp}{FRApp}
+%
+\begin{Description}
+A Shiny app to fit the nonlinear mixed effects model to FRAP data. By default,
+R opens the Shiny app in the default browser.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+FRApp(...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{...}] shinyApp function options
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}
+FRApp is shiny app that provides a user-friendly interactive interface to
+streamline the data analysis derived by fitting nonlinear mixed-effects
+regression models with an asymptotic exponential functional relationship
+on data with a hierarchical structure.
+
+The application accepts the csv files format. By default, it uses the
+semicolon as the field separator and the period as the decimal separator,
+but you can select different separators from the drop-down menu.
+
+The first line of the file must contain the variable names.
+The Browse button allows you to load your own data file to be analyzed.
+
+Via the application you can: estimate and compare exponential mixed-effects
+models; print a model report; export the data and the model corresponding
+objects.
+
+The vignette describes how to reproduce the analysis presented in
+Di Credico, G., Pelucchi, S., Pauli, F. et al. in Scientific Report
+15, 5790 (2025) \url{doi:10.1038/s41598-025-87154-w}
+\end{Details}
+%
+\begin{Value}
+A list of objects that defines the Shiny app.
+
+None
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+# Run the app
+if (interactive()) {
+  FRApp()
+}
+
+\end{ExampleCode}
+\end{Examples}
+\printindex{}
+\end{document}

@@ -1,3 +1,3 @@
-# FRApp (development version)
+# FRApp 2.0.0
 
 * Initial CRAN submission.
