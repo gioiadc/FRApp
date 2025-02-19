@@ -1,0 +1,9 @@
+load("/Users/gioia/Library/CloudStorage/OneDrive-UniversitàdegliStudidiTrieste/Ricerca/FRAP/FRApp/data/FRAPdata.rda")
+data(FRApp)
+ls()
+FRAPdata
+load("/Users/gioia/Library/CloudStorage/OneDrive-UniversitàdegliStudidiTrieste/Ricerca/FRAP/FRApp/data/FRAPdata.rda")
+ls()
+FRAPdata
+load("/Users/gioia/Library/CloudStorage/OneDrive-UniversitàdegliStudidiTrieste/Ricerca/FRAP/FRApp/data/FRAPdata.rda")
+FRAPdata
