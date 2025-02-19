@@ -1,3 +1,0 @@
-\contentsline {subsection}{FRAPdata}{2}{page.2}
-\contentsline {subsection}{FRApp}{2}{page.2}
-\contentsline {chapter}{Index}{4}{page.4}
