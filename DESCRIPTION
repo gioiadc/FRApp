@@ -3,7 +3,8 @@ Type: Package
 Title: FRAP data analysis using nonlinear mixed effect models with Shiny
 Version: 0.0.0.9000
 Authors@R: 
-    person("Gioia", "Di Credico", , "gioia.dicredico@deams.units.it", role = c("aut", "cre"),
+    person("Gioia", "Di Credico", , "gioia.dicredico@deams.units.it", 
+    role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-7502-4160"))
 Description: FRAP data analysis using nonlinear mixed effect models with Shiny.
 License: GPL (>= 3)

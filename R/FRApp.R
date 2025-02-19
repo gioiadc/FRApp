@@ -78,11 +78,32 @@
 #'
 #' @export
 #'
+#' @details
+#' FRApp is shiny app that provides a
+#' user-friendly interactive interface to streamline
+#' the data analysis derived by fitting nonlinear mixed-effects
+#' regression models with an asymptotic exponential functional
+#' relationship on data with a hierarchical structure.
+#'
+#' The application accepts the csv files format. By default,
+#' it uses the semicolon as the field separator and the period as
+#' the decimal separator, but you can select different separators
+#' from the drop-down menu.
+#'
+#' The first line of the file must contain the variable names.
+#' The *Browse…* button allows you to load your own data file to be analyzed.
+#'
+#' Via the application you can: estimate and compare exponential mixed-effects models;
+#' print a model report; export the data and the model corresponding objects.
+#'
+#' @return None
+#'
 #' @examples
 #' # Run the app
-#' \dontrun{
+#'
 #' FRApp()
-#' }
+#'
+
 FRApp <- function(...) {
   ui <- fluidPage(
     titlePanel("FRApp - Data analysis using exponential mixed-effects models"),
