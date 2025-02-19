@@ -17,5 +17,5 @@
 #'   \item{time}{Time, from 0 to 99.84}
 #'   \item{y}{Fluorescence intensities}
 #' }
-#' @source Nonlinear mixed-effects models to analyze actin dynamics in dendritic spines - Di Credico, Pelucchi, Pauli, Di Luca, Marcello, Edefonti
+#' @source Di Credico, G., Pelucchi, S., Pauli, F. et al. Nonlinear mixed-effects models to analyze actin dynamics in dendritic spines. Sci Rep 15, 5790 (2025). https://doi.org/10.1038/s41598-025-87154-w
 "FRAPdata"

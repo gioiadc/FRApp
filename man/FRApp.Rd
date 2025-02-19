@@ -11,14 +11,38 @@ FRApp(...)
 }
 \value{
 A list of objects that defines the Shiny app.
+
+None
 }
 \description{
 A Shiny app to fit the nonlinear mixed effects model to FRAP data. By default,
 R opens the Shiny app in the default browser.
 }
+\details{
+FRApp is shiny app that provides a user-friendly interactive interface to
+streamline the data analysis derived by fitting nonlinear mixed-effects
+regression models with an asymptotic exponential functional relationship
+on data with a hierarchical structure.
+
+The application accepts the csv files format. By default, it uses the
+semicolon as the field separator and the period as the decimal separator,
+but you can select different separators from the drop-down menu.
+
+The first line of the file must contain the variable names.
+The Browse button allows you to load your own data file to be analyzed.
+
+Via the application you can: estimate and compare exponential mixed-effects
+models; print a model report; export the data and the model corresponding
+objects.
+
+The vignette describes how to reproduce the analysis presented in
+Di Credico, G., Pelucchi, S., Pauli, F. et al. in Scientific Report
+15, 5790 (2025) \url{doi:10.1038/s41598-025-87154-w}
+}
 \examples{
 # Run the app
-\dontrun{
-FRApp()
+if (interactive()) {
+  FRApp()
 }
+
 }

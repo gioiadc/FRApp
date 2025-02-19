@@ -1,12 +1,11 @@
 bibentry(
   bibtype  = "Article",
   title    = "Nonlinear mixed-effects models to analyze actin dynamics in dendritic spines",
-  author   = "Gioia {Di Credico}, Silvia Pelucchi, Francesco Pauli, Monica {Di Luca}, Elena
-Marcello, Valeria Edefonti",
-  journal  = "Submitted",
-  year     = "2024",
-  volume   = "1",
-  number   = "1",
-  pages    = "1",
-  doi      = "10.21105/joss.01686"
+  author   = "Di Credico, G., Pelucchi, S., Pauli, F. et al.",
+  journal  = "Scientific Reports",
+  year     = "2025",
+  volume   = "15",
+  number   = "5790",
+  pages    = "1-14",
+  doi      = "10.1038/s41598-025-87154-w"
 )

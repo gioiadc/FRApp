@@ -101,8 +101,9 @@
 #'
 #' @examples
 #' # Run the app
-#'
-#' FRApp()
+#' if (interactive()) {
+#'   FRApp()
+#' }
 #'
 #' @export
 FRApp <- function(...) {
