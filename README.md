@@ -22,8 +22,8 @@ is available in a dedicated vignette.
 To use the **FRApp** application first download and install R and
 RStudio from [posit.co](https://posit.co/download/rstudio-desktop/).
 
-You can install the package executing the following commands from the
-RStudio console:
+You can install the package from the CRAN executing the following
+commands from the RStudio console:
 
 ``` r
 install.packages("FRApp")
